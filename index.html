@@ -1,1 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nusrat's Hub</title>
+    <style>
+        @import url('https://googleapis.com');
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #fcefeffb;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* App Container mimicking a mobile phone view screen */
+        .app-container {
+            width: 100%;
+            max-width: 412px;
+            height: 100vh;
+            background: #fff5f6;
+            box-shadow: 0 10px 30px rgba(223, 119, 137, 0.15);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top App Header bar */
+        .app-header {
+            background: #ff758f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 4px 12px rgba(255, 117, 143, 0.2);
+        }
+        .app-header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+        .app-header p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.9; }
+
+        /* Main Scrollable Content Window */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 90px;
+        }
+
+        /* UI Navigation Bottom Bar */
+        .app-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid #ffe3e7;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.03);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            border: none;
+            background: none;
+            color: #a39294;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+        .nav-item span { font-size: 20px; }
+        .nav-item.active { color: #ff758f; }
+
+        /* App View Screens switching settings */
+        .view-panel { display: none; }
+        .view-panel.active { display: block; }
+
+        /* Cards and Lists styling */
+        .cute-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 15px;
+            border: 1px solid #ffd6dc;
+            box-shadow: 0 4px 8px rgba(255, 117, 143, 0.04);
+        }
+        .card-title { font-size: 15px; font-weight: 700; color: #ff4d6d; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;}
+        .card-desc { font-size: 13.5px; color: #5c4d50; line-height: 1.5; margin: 0; }
+
+        /* Reason item lists */
+        .reason-row {
+            display: flex;
+            gap: 12px;
+            background: #fff0f2;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .reason-num { background: #ff758f; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+        .reason-text { font-size: 13.5px; color: #4a3b3e; font-weight: 600; }
+
+        /* Pictures Gallery Layout Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .photo-wrapper {
+            background: #fff;
+            border: 1px solid #ffd6dc;
+            border-radius: 14px;
+            overflow: hidden;
+            padding: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+        .photo-wrapper img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 10px;
+            background-color: #ffe3e7;
+        }
+        .photo-caption { font-size: 11px; color: #ff758f; font-weight: 600; margin-top: 6px; margin-bottom: 2px; }
+
+        /* Interactive digital fortune game inside the application */
+        .generator-btn {
+            background: #ff758f; color: white; border: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: transform 0.1s;
+        }
+        .generator-btn:active { transform: scale(0.98); }
+        #fortune-display { text-align: center; font-weight: 600; color: #ff4d6d; margin-top: 15px; font-size: 14.5px; min-height: 22px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- App Top Header Frame Layout -->
+        <div class="app-header">
+            <h1 id="header-title">Nusrat's Space</h1>
+            <p id="header-subtitle">Exclusively configured for your phone</p>
+        </div>
+
+        <!-- Main Dynamic Screen Panels -->
+        <div class="app-content">
+
+            <!-- TAB 1: THE HOME FEED PANELS -->
+            <div id="panel-home" class="view-panel active">
+                <div class="cute-card">
+                    <div class="card-title">✨ Welcome, Nusrat!</div>
+                    <p class="card-desc">I created this private app workspace just for you. This screen contains quick reminders of us that you can look at whenever you launch it on your mobile phone screen.</p>
+                </div>
+
+                <div class="cute-card">
+                    <div class="card-title">💌 Message Of The Day</div>
+                    <p class="card-desc" style="font-style: italic; color: #ff758f; font-weight: 600;">"No matter how many miles lie between us, you are always the brightest part of my day. Happy Birthday, beautiful."</p>
+                </div>
+
+                <div class="cute-card">
+                    <div class="card-title">🔮 Virtual Mood Booster</div>
+                    <p class="card-desc" style="margin-bottom:12px;">Feeling tired, bored, or missing me? Click the system switch below to generate a quick response box instantly:</p>
+                    <button class="generator-btn" onclick="getBoost()">Activate Boost</button>
+                    <div id="fortune-display"></div>
+                </div>
+            </div>
+
+            <!-- TAB 2: WHY I LIKE YOU CORNER LISTS -->
+            <div id="panel-reasons" class="view-panel">
+                <div class="cute-card" style="background: transparent; border: none; padding: 0; box-shadow: none;">
+                    <p class="card-desc" style="margin-bottom: 15px;">A clean database log outlining a few of the core reasons why I choose you every single day:</p>
+                </div>
+                
+                <div class="reason-row">
+                    <div class="reason-num">1</div>
+                    <div class="reason-text">Your brilliant intelligence and the way your mind works.</div>
+                </div>
+                <div class="reason-row">
+                    <div class="reason-num">2</div>
+                    <div class="reason-text">How completely safe and happy I feel whenever we speak.</div>
+                </div>
+                <div class="reason-row">
+                    <div class="reason-num">3</div>
+                    <div class="reason-text">The incredible support you give me without even realizing it.</div>
+                </div>
+                <div class="reason-row">
+                    <div class="reason-num">4</div>
+                    <div class="reason-text">Your absolute kindness and the beautiful soul you have.</div>
+                </div>
+                <div class="reason-row">
+                    <div class="reason-num">5</div>
+                    <div class="reason-text">How your smile can completely change my entire day around.</div>
+                </div>
+            </div>
+
+            <!-- TAB 3: PICTURES GALLERY GRID SYSTEM -->
+            <div id="panel-gallery" class="view-panel">
+                <div class="photo-grid">
+                    
+                    <!-- Picture Card 1 -->
+                    <div class="photo-wrapper">
+                        <!-- Replace the placeholder URL with her photo link anytime -->
+                        <img src="https://picsum.photos" alt="Nusrat Pic 1">
+                        <div class="photo-caption">My Favorite Smile ✨</div>
+                    </div>
+
+                    <!-- Picture Card 2 -->
+                    <div class="photo-wrapper">
+                        <img src="https://picsum.photos" alt="Nusrat Pic 2">
+                        <div class="photo-caption">Most Beautiful Girl ❤️</div>
+                    </div>
+
+                    <!-- Picture Card 3 -->
+                    <div class="photo-wrapper">
+                        <img src="https://picsum.photos" alt="Nusrat Pic 3">
+                        <div class="photo-caption">Angel Eyes 🌸</div>
+                    </div>
+
+                    <!-- Picture Card 4 -->
+                    <div class="photo-wrapper">
+                        <img src="https://picsum.photos" alt="Nusrat Pic 4">
+                        <div class="photo-caption">Pure Perfection 💕</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- System UI Navigation Tabs Layout Bar -->
+        <div class="app-nav">
+            <button class="nav-item active" onclick="switchTab('home', this)">
+                <span>🏠</span>Home
+            </button>
+            <button class="nav-item" onclick="switchTab('reasons', this)">
+                <span>💖</span>Why I Like You
+            </button>
+            <button class="nav-item" onclick="switchTab('gallery', this)">
+                <span>🖼️</span>Gallery
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab switching UI core script logic
+        function switchTab(tabName, buttonElement) {
+            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('panel-' + tabName).classList.add('active');
+            buttonElement.classList.add('active');
+
+            const headerTitle = document.getElementById('header-title');
+            if(tabName === 'home') headerTitle.innerText = "Nusrat's Space";
+            if(tabName === 'reasons') headerTitle.innerText = "Why I Like You";
+            if(tabName === 'gallery') headerTitle.innerText = "Nusrat's Gallery";
+        }
+
+        // Random generator function logic
+        function getBoost() {
+            const boosts = [
+                "Remember: I am always so lucky to have you. 🥰",
+                "You are capable of handling anything today throws at you! 💪",
+                "Go drink a glass of water right now, take care of yourself. 💧",
+                "Sending you a massive virtual hug across the distance right now! 🤗",
+                "I am counting down every second until we hang out on video call next. ⏳"
+            ];
+            const display = document.getElementById('fortune-display');
+            display.innerText = "Processing...";
+            setTimeout(() => {
+                display.innerText = boosts[Math.floor(Math.random() * boosts.length)];
+            }, 400);
+        }
+    </script>
+</body>
+</html>
 
